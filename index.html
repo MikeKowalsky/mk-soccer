@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>spa-schedule</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="styles/spa.css">
+
+	<link rel="shortcut icon" sizes="128x128" href="logo.png">
+	<link rel="shortcut icon" sizes="196x196" href="logo.png">
+
+	<link rel="apple-touch-icon" href="logo.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="logo.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="logo.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="logo.png">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+
+	<div id="mainDiv" class="container">
+		<header class="header">
+				<div>
+					<a href="index.html"><img src="logo.png"></a>
+					<div>
+						<h2>Schedule</h2>
+						<h3>Bundesliga</h3>
+						<p>Spring 2018</p>
+					</div>
+				</div>
+		</header>
+
+		<div id="indexDiv" class="buttons">
+			<a id="ftd" href="#" class="button">Find the date</a>
+			<a id="fyt" href="#" class="button">Find your team</a>
+			<a id="ftl" href="#" class="button">Find the location</a>
+			<a id="chatBut" href="#" class="button">Chat</a>
+			<!-- <a id="ai" href="#" class="button">Additional info</a> -->
+		</div>
+
+		<div id="dBut" class="buttons">
+			<a id="cgd" href="#" class="button">Closest game day</a>
+		</div>
+
+		<div id="dmBut" class="buttons">
+		</div>
+
+		<div id="gd" class="gamesContainer">
+				<div class="dropdown">
+				  <button class="dropbtn">9 / 01</button>
+				  <div class="dropdown-content">
+				  </div>
+				</div>
+		</div>
+
+		<div id="teamDiv" class="buttons">
+			<a href="#" class="notActiv">Choose your team</a>
+			<div id="teamButtons" class="buttons">
+			</div>
+		</div>
+
+		<div id="findLocation" class="buttons">
+			<a href="#" class="notActiv">Choose the location</a>
+			<div id="locationButtons" class="buttons">
+			</div>	
+		</div>
+
+		<div id="mapDiv" class="map">
+		</div>
+
+		<div id="rightSide">
+			<img src="collage.png" alt="team collage">
+		</div>
+
+		<div id="loginDiv" class="buttons">
+            <a href="#" class="notActiv">Chat</a>
+<!--            <a id="login" class="button">To join chat please log in!</a>-->
+            <p>To join chat please log in!</p>
+            <a id="login" class="button">Google Account</a>
+            <a id="loginWEMail" class="button">E-Mail</a>
+<!--            <small>Want to log out?</small>-->
+<!--            <a id="logOut" class="buttonSM">Log out</a>-->
+        </div>
+        
+        <div id="loginEmailDiv" class="buttons">
+            <a href="#" class="notActivSM">Log in with e-mail</a>
+            <input id="userEmail" class="inputField" type="text" placeholder="E-mail">
+            <input id="userPass" class="inputField" value="" type="password" placeholder="Password">
+            <div id="showPassLine">
+                <input id="showPassBut" type="checkbox" onclick="showPass(userPass)">
+                <label for="showPassBut"><p>Show Password</p></label>
+            </div>
+            <a id="loginEMailBut" class="button">Log in!</a>
+            <p>Have no account?</p>
+            <a id="signInBut" class="buttonSM">Sign in!</a>
+        </div>
+        
+        <div id="signInDiv" class="buttons">
+            <a href="#" class="notActiv">Sign in form</a>
+            <input id="newName" class="inputField" type="text" placeholder="Enter name">
+<!--            <input id="newLastName" class="inputField" type="text" placeholder="Enter last name">-->
+            <input id="newEmail" class="inputField" type="text" placeholder="Enter e-mail">
+            <input id="newPass" class="inputField" type="password" value="" placeholder="Enter password">
+            <div id="showPassLine">
+                <input id="showPassBut2" type="checkbox" onclick="showPass(newPass)">
+                <label for="showPassBut2"><p>Show Password</p></label>
+            </div>
+            <a id="signInEmailBut" class="button">Sign in!</a>
+        </div>
+        
+        <div id="chatDiv" class="buttons">
+            <a id="chatName" href="#" class="notActivSM">Chat</a>
+            <a id="logOut" class="buttonSM">Log out</a>
+
+            <div id="postsDiv" class="buttonsChat">
+            </div>
+            
+            <div id="msgLine">
+              <input id="postInput" class="inputField" type="text" placeholder="Your message...">
+              <a id="createPost" class="sendButton">Send</a>
+            </div>
+        </div>
+
+	</div>
+
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCZxci24eXAFjUm4qwEolFyz-Akbr6fzq4",
+    authDomain: "mk-soccer.firebaseapp.com",
+    databaseURL: "https://mk-soccer.firebaseio.com",
+    projectId: "mk-soccer",
+    storageBucket: "mk-soccer.appspot.com",
+    messagingSenderId: "125841371239"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script src="scripts/deuBund.js"></script>
+<script src="scripts/deuBundClubs.js"></script>
+<script src="scripts/spa.js"></script>
+
+</body>
+
+</html>
