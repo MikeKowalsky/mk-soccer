@@ -1,30 +1,76 @@
 
-let clubs = deuBundClubs.clubs;
-console.log(clubs);
+// main variables to exchange date between functions
+var locationMain = '';
+var monthMain = '';
+var dayMain = '';
+var teamMain = '';
+var chatMain = '';
 
-let rounds = deuBund.rounds;
-let matchesArray = [];
-rounds.forEach((round) => round.matches.forEach((match) => matchesArray.push(match)));
-console.log(matchesArray);
+// gettin date from json files
+$.getJSON("jsons/deuBund.json", function(roundsJ) {
+    $.getJSON("jsons/deuBundClubs.json", function(clubsJ) {
+        main (roundsJ, clubsJ);
+    });
+});
 
-let locationMain = '';
-let monthMain = '';
-let dayMain = '';
-let teamMain = '';
-let chatMain = '';
+// main function
+function main(leagueInfo, clubsInfo){
 
-$(document).ready(() => {
+    // when document is ready start event listeners
+    $(document).ready(() => {
+        
+        // hide divs
+        $("#dBut").hide();
+        $("#dmBut").hide();
+        $("#gd").hide();
+        $("#teamDiv").hide();
+        $("#findLocation").hide();
+        $("#mapDiv").hide();
+        $("#loginDiv").hide();
+        $("#loginEmailDiv").hide();
+        $("#signInDiv").hide();
+        $("#chatDiv").hide();
+        
+        // decide what will be show in the begining, during rendereing 
+        if ($(window).height() > 1000){
+            $("#rightSide").show();
+        } else if (window.matchMedia("(orientation: portrait)").matches){
+            $("#rightSide").hide();
+        } else {
+            $("#rightSide").show();
+        }
+        
+        // all event listeners - do I need to call this?
+        activateEventListeners();
+        
+        let clubs = clubsInfo.clubs;
+        let rounds = leagueInfo.rounds;
 
-	// event listener -> when form landscape to portrait (hide map etc)
-//	window.addEventListener("orientationchange", function() {
-	window.addEventListener("resize", function() {
-//        console.log(screen.orientation.angle);
-//        console.log(screen.orientation);
+        // main array with all matches
+        let matchesArray = [];
+        rounds.forEach((round) => round.matches.forEach((match) => matchesArray.push(match)));
+//        console.log(matchesArray); // check data
+        
+        // prepare main lists for main buttons
+        listOfLocations(matchesArray, clubs);
+        listOfTeams(matchesArray, clubs);
+        listOfMonths(matchesArray);
+
+
+    });
+    
+}
+
+// activatte the listeners
+function activateEventListeners(){
+    
+    // event listener -> when form landscape to portrait (hide map etc)
+    window.addEventListener("resize", function() {
         if(window.matchMedia("(orientation: portrait)").matches){
-            console.log("portrait");
-            console.log($(window).height());
-            if (($(window).height() > 1000) && $(".gamesContainer").css('display') == 'none' && $("#findLocation").css('display') == 'none' && $("#teamDiv").css('display') == 'none' && $(".map").css('display') == 'none' && $("#loginDiv").css('display') == 'none' && $("#chatDiv").css('display')) {
-                console.log($(window).height());
+//                console.log("portrait");
+//                console.log($(window).height());
+            if (($(window).height() > 1000) && $(".gamesContainer").css('display') == 'none' && $("#findLocation").css('display') == 'none' && $("#teamDiv").css('display') == 'none' && $(".map").css('display') == 'none' && $("#loginDiv").css('display') == 'none' && $("#chatDiv").css('display') == 'none') {
+//                    console.log($(window).height());
                 $("#rightSide").show();
             } else {
                 $("#rightSide").hide();
@@ -32,7 +78,7 @@ $(document).ready(() => {
             $("#gd").removeClass("gamesContainerL");
             $("#gd").addClass("gamesContainer");
         } else {
-            console.log("landscape");
+//                console.log("landscape");
             if ($(".gamesContainer").css('display') != 'none' || $("#findLocation").css('display') != 'none' || $("#teamDiv").css('display') != 'none' || $(".map").css('display') != 'none' || $("#loginDiv").css('display') != 'none' || $("#chatDiv").css('display') != 'none'){
                 $("#rightSide").hide();
             } else {
@@ -40,53 +86,29 @@ $(document).ready(() => {
             }
         }
     });
-    
-    // in the begining during rendereing 
-	if ($(window).height() > 1000){
-		$("#rightSide").show();
-        console.log(" h > 1000, so show right");
-	} else if (window.matchMedia("(orientation: portrait)").matches){
-		$("#rightSide").hide();
-        console.log(" portrait, so hide right");
-	} else {
-		$("#rightSide").show();
-        console.log(" else, so show right");
-	}
-    
-    // hide divs
-    $("#dBut").hide();
-	$("#dmBut").hide();
-	$("#gd").hide();
-	$("#teamDiv").hide();
-	$("#findLocation").hide();
-	$("#mapDiv").hide();
-    $("#loginDiv").hide();
-    $("#loginEmailDiv").hide();
-    $("#signInDiv").hide();
-    $("#chatDiv").hide();
 
-	// show months
-	$("#ftd").click(() => {
-		$("#indexDiv").hide();
-		$("#dBut").show();
-	});
+    // show months
+    $("#ftd").click(() => {
+        $("#indexDiv").hide();
+        $("#dBut").show();
+    });
 
-	//show teams
-	$("#fyt").click(() => {
-		$("#indexDiv").hide();
-		$("#rightSide").hide();
-		$("#teamDiv").show();
-	});
+    //show teams
+    $("#fyt").click(() => {
+        $("#indexDiv").hide();
+        $("#rightSide").hide();
+        $("#teamDiv").show();
+    });
 
-	// show locations
-	$("#ftl").click(() => {
-		$("#indexDiv").hide();
-		$("#rightSide").hide();
-		$("#findLocation").show();
-	});
+    // show locations
+    $("#ftl").click(() => {
+        $("#indexDiv").hide();
+        $("#rightSide").hide();
+        $("#findLocation").show();
+    });
 
     // show chat
-	$("#chatBut").click(() => {
+    $("#chatBut").click(() => {
         chatMain = 'posts';
         chatNameButton(chatMain);
         if (firebase.auth().currentUser != null){
@@ -96,21 +118,13 @@ $(document).ready(() => {
             $('#mainDiv').removeClass('containerChat');
             getPosts(chatMain);
             $("#chatDiv").show();
-//            console.log($("#chatDiv").height());
         } else {
             $("#indexDiv").hide();
             $("#rightSide").hide();
             $("#loginDiv").show();
         }
-        let user = firebase.auth().currentUser;
-        console.log(user);
-	});
+    });
 
-	listOfLocations();
-	listOfTeams();
-	listOfMonths();
-    
-    
     $("#login").click(() => {
         login();
     });
@@ -148,28 +162,30 @@ $(document).ready(() => {
             $("#postInput").val("");
         }
     });
-});
+}
 
-function closestGameday(){
+// check current date and find closest game day 
+function closestGameday(matchesArray){
 
 	let now = new Date();
 	now.getDate();
 
 	// filter only gamedays in the future
 	let onlyFuture = matchesArray.filter((match) => (((new Date(match.date) - now) > 0) && (teamMain == '' || teamMain == match.team1.name.replace(/ /g, "") || teamMain == match.team2.name.replace(/ /g, ""))));
-	console.log(onlyFuture);
+//	console.log(onlyFuture);
 	let closestDay = onlyFuture[0].date;
-	console.log(closestDay);
+//	console.log(closestDay);
 
 	let tempDate = new Date(closestDay);
 	monthMain = getMonthName(tempDate.getMonth());
 	dayMain = tempDate.getDate();
-	console.log("day: " + dayMain + ", month: " + monthMain);
+//	console.log("day: " + dayMain + ", month: " + monthMain);
 
-	setOneDay();
+	setOneDay(matchesArray);
 }
 
-function printOneDay(dayArray){
+// game list from chosen day
+function printOneDay(dayArray, matchesArray){
 
 	// dropdown handling
 	// all games from that month
@@ -193,8 +209,8 @@ function printOneDay(dayArray){
 			onlyNoDuplDates.push(date);
 		}
 	});
-	console.log(onlyNoDuplDates);
-
+//	console.log(onlyNoDuplDates);
+    
 	$("button.dropbtn").replaceWith("<button class=\"dropbtn\">" + dayArray[0].date + "</button>");
 
     // dropdown menu links
@@ -203,7 +219,7 @@ function printOneDay(dayArray){
 		$("div.dropdown-content").append("<a data-field=" + date + " class=\"dropDownBut\" href=\"#\">" + date + "</a>");
 	});
 
-	//links to games and chats
+	//buttons with games and links to chats
 	$('.gameLink').remove();
     $('.runChat').remove();
 	dayArray.forEach((match) => {
@@ -217,6 +233,7 @@ function printOneDay(dayArray){
 		}
 	});
 
+    // event listeners for new created buttons with data-fields
 	$(".gameLink").click(function() {
 		locationMain = $(this).attr("data-field");
 		let linkMap = getMapLink(locationMain);
@@ -240,12 +257,12 @@ function printOneDay(dayArray){
 		monthMain = getMonthName(dropDate.getMonth());
 		dayMain = dropDate.getDate();
 		// console.log(monthMain + " " + dayMain);
-		setOneDay();
+		setOneDay(matchesArray);
 	});
     
     $(".runChat").click(function() {
         chatMain = $(this).attr("data-field");
-        console.log(chatMain);
+//        console.log(chatMain);
         chatNameButton(chatMain);
         $("#gd").hide();
         $("#rightSide").hide();
@@ -260,6 +277,7 @@ function printOneDay(dayArray){
     });
 }
 
+// getting name of the months
 function getMonthName(num){
 	switch (num) {
 		case 0: return 'January';
@@ -277,6 +295,7 @@ function getMonthName(num){
 	}
 }
 
+// getting link to map to selected stadium
 function getMapLink(location){
 	let linkMap = '';
 	
@@ -320,14 +339,16 @@ function getMapLink(location){
 	}
 }
 
-function listOfLocations(){
+// preparing list od stadiums
+function listOfLocations(matchesArray, clubs){
 
 	let locationArray = [];
 	let locationArrayLinks = [];
 	let sadiumsNames = [];
 	let logoLinkArray = [];
 	let logoLink = '';
-	
+    
+	// preparing data to build buttons with logos, stadion names
 	matchesArray.forEach((match) => {
 		if (!locationArray.includes(match.team1.name)){
 			locationArray.push(match.team1.name);
@@ -342,16 +363,14 @@ function listOfLocations(){
 		}
 	});
 
+    // building buttons
 	for (let i = 0; i < locationArray.length; i ++){
 		$('#locationButtons').append("<a data-field=" + locationArrayLinks[i] + " href=\"#\" class=\"mapBut buttonSM\">" + sadiumsNames[i] + "<br>" + logoLinkArray[i] + "<br>" + locationArray[i] + "</a>")
 	}
 
-	// console.log($(window).width());
-	// console.log($(window).height());
-
+    // event listener to buttons + adding link to google maps
 	$(".mapBut").click((e) => {
 		locationMain = $(e.currentTarget).attr("data-field");
-		console.log(locationMain + " calling gameMapLink");
 		let linkMap = getMapLink(locationMain);
 		if ($(window).width() < 560){
 			$(".map").append(linkMap);
@@ -368,19 +387,23 @@ function listOfLocations(){
 	});
 }
 
-function listOfTeams(){
-	let teamsArray = [];
+// preparing list of teams
+function listOfTeams(matchesArray, clubs){
 	
-	matchesArray.forEach((match) => {
+    let teamsArray = [];
+	
+    //select all teams
+    matchesArray.forEach((match) => {
 		if (!teamsArray.includes(match.team1.name)){
 			teamsArray.push(match.team1.name);
 		} else if (!teamsArray.includes(match.team2.name)){
 			teamsArray.push(match.team1.name);
 		}
 	});
-	teamsArray.sort();
-	let teamsArrayFormatted = teamsArray.map((team) => team.replace(/ /g, ""));
+	teamsArray.sort(); // sort teams
+	let teamsArrayFormatted = teamsArray.map((team) => team.replace(/ /g, "")); // format data to send through data-field local storage
 
+    //biuld buttons with logos
 	for (let i = 0; i < teamsArray.length; i++){
 		let logoLinkPart = '';
 		clubs.forEach((club) => {
@@ -392,19 +415,22 @@ function listOfTeams(){
 		$('#teamButtons').append("<a data-field=" + teamsArrayFormatted[i] + " href=\"#\" class=\"buttonSM teamsBut\">" + logoLink + "<br>" + teamsArray[i] + "</a>");
 	}
 
+    //event listner + sending data from data-field
 	$(".teamsBut").click((e) => {
 		teamMain = $(e.currentTarget).attr("data-field");
-		console.log(teamMain);
-		listOfMonths();
+		listOfMonths(matchesArray);
 		$("#teamDiv").hide();
 		$("#dBut").show();
 		$("#rightSide").show();
 	});
 }
 
-function listOfMonths(){
-	let monthsArray = [];
+// preparing list of months
+function listOfMonths(matchesArray){
 	
+    let monthsArray = [];
+	
+    //select months in which there are matches
 	matchesArray.forEach((match) => {
 		let tempDate = new Date(match.date);
 		let tempMonth = getMonthName(tempDate.getMonth());
@@ -416,12 +442,12 @@ function listOfMonths(){
 
 	//remove old monthBut to create new one
 	$('.monthBut').remove();
-	console.log("monthsArray: " + monthsArray);
 	monthsArray.forEach((month) => $('#dBut').append("<a data-field=" + month + " href=\"#\" class=\"monthBut button\">" + month + "</a>"));
 
+    // event listeners to pass the data and change pages
 	$(".monthBut").click(function(){
 		monthMain = $(this).attr("data-field");
-		listOfDays();
+		listOfDays(matchesArray);
 		$("#dBut").hide();
 		$("#dmBut").show();
 	});
@@ -429,18 +455,21 @@ function listOfMonths(){
 
 	$("#cgd").click(function(e){
 		e.preventDefault();
-		closestGameday();
+		closestGameday(matchesArray);
 		$("#dBut").hide();
 		$("#rightSide").hide();
 		$("#gd").show();
 	});
 }
 
-function listOfDays(){
-	console.log(monthMain);
+// preparing list of days
+function listOfDays(matchesArray){
+    
+    //add button with selected month name
 	$('#dmBut').append("<a href=\"#\" class=\"notActiv\">" + monthMain + "</a>");
 
 	let daysArray = [];
+    //select days in which there are games in selected month
 	matchesArray.forEach((match) => {
 		let tempDate = new Date(match.date);
 		let tempMonth = getMonthName(tempDate.getMonth());
@@ -451,24 +480,26 @@ function listOfDays(){
 		}
 	});
 
-	//remove old monthBut to create new one
+	//remove old day buttons to create new one
 	$('.dayBut').remove();
-	console.log("daysArray: " + daysArray);
 	daysArray.forEach((day) => $('#dmBut').append("<a data-field=" + day + " href=\"#\" class=\"buttonSM dayBut\">" + day + "</a>"));
 
+    //event listener to pass the data and change page
 	$(".dayBut").click(function(){
 		dayMain = $(this).attr("data-field");
-		setOneDay();
+		setOneDay(matchesArray);
 		$("#dmBut").hide();
 		$("#rightSide").hide();
 		$("#gd").show();
 	});
 }
 
-function setOneDay(){
+// setting up date for one day print
+function setOneDay(matchesArray){
 	let selectedDay = dayMain;
 	let selectedMonth = monthMain;
 	
+    // preparing array with matches from selected day
 	let selectedGames = [];
 	matchesArray.forEach((match) => {
 		let tempDate = new Date(match.date);
@@ -479,13 +510,12 @@ function setOneDay(){
 			selectedGames.push(match);
 		}
 	});
-
-	console.log("selectedGames: ");
-	console.log(selectedGames);
-
-	printOneDay(selectedGames);
+    
+    // call printing function
+	printOneDay(selectedGames, matchesArray);
 }
 
+// log in with google account
 function login() {
     
     // Provider
@@ -499,22 +529,20 @@ function login() {
             getPosts(chatMain);
             $("#loginDiv").hide();
             $("#chatDiv").show();
-            let user = firebase.auth().currentUser;
-            console.log(user);
+//            let user = firebase.auth().currentUser;
+//            console.log(user);
         })
         .catch(function(error) {
             alert('error' + error.message);
         });
 }
 
-
+// log in with email & password
 function loginEmail() {
 
     event.preventDefault();
     let email = $('#userEmail').val();
-    console.log(email);
     let password = $('#userPass').val();
-    console.log(password);
 
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then(function (result) {
@@ -523,17 +551,18 @@ function loginEmail() {
             getPosts(chatMain);
             $("#loginEmailDiv").hide();
             $("#chatDiv").show();
-            let user = firebase.auth().currentUser;
-            console.log(user);
         })
         .catch(function (error) {
             alert('error' + error.message);
         });
 }
 
-
+// writting data to data base 
 function writeNewPost(dbName) {
+    
+    let audio = new Audio('chat.mp3');
 
+    //building data base entry
     var text = $("#postInput").val();
     var userName = (firebase.auth().currentUser.displayName == null) ? firebase.auth().currentUser.email : firebase.auth().currentUser.displayName;
     var postDate = new Date();
@@ -551,20 +580,25 @@ function writeNewPost(dbName) {
     var updates = {};
     updates[newPostKey] = post;
     
+    //play sound
+    audio.play();
+    
 //    console.log(updates);
     
     return firebase.database().ref(dbName).update(updates);
 }
 
-
+// getting posts from data base
 function getPosts(dbName) {
 
      firebase.database().ref(dbName).on('value', function (data) {
 
          var postsFB = data.val();
-
+         
+         //clear div
          $("#postsDiv").empty();
          
+         //adding posts
          var options = { year: 'numeric', month: 'long', day: 'numeric', hour: '', minute: '', second: ''}; 
          for(let i in postsFB) {
             let thisDate = new Date(postsFB[i].time);
@@ -574,20 +608,21 @@ function getPosts(dbName) {
                 $("#postsDiv").append("<a class=\"chatMsg othersPost\" href=\"#\"><small>" + postsFB[i].name + "</small><br>" + postsFB[i].body + "<br><small>" + thisDate.toLocaleString('en-US') + "</small></a>"); 
             }
          };
-
-     })
+         
+         //scroll animation
+         $("#postsDiv").animate({ scrollTop: $("#postsDiv").prop("scrollHeight") }, 500);
+     });
 }
 
+// creating new user
 function registeration() {
 
     let newEmail = $('#newEmail').val();
-    console.log(newEmail);
     let newPassword = $('#newPass').val();
-    console.log(newPassword);
 
     firebase.auth().createUserWithEmailAndPassword(newEmail, newPassword)
         .then(function (result) {
-            alert('registration complete');
+//            alert('registration complete');
             $('#signInDiv').hide(); 
             $('#loginEmailDiv').show();
         })
@@ -596,11 +631,12 @@ function registeration() {
         });
 }
 
+// log out
 function logOut(){
     
     firebase.auth().signOut()
         .then(function() {
-            alert('You are logged out!');
+//            alert('You are logged out!');
             $("#chatDiv").hide();
             $("#indexDiv").show();
         })
@@ -609,6 +645,7 @@ function logOut(){
         });
 }
 
+// show/hide password
 function showPass(id) {
     if (id.type === "password") {
         id.type = "text";
@@ -617,8 +654,8 @@ function showPass(id) {
     }
 }
 
+// create different buttons for different chats
 function chatNameButton(inChatName) {
-    console.log("in chat name change");
     if(chatMain == 'posts'){
         $("#chatName").replaceWith("<a id=\"chatName\" href=\"#\" class=\"notActivSM\">Chat</a>");
     } else {

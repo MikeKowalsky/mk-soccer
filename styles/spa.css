@@ -585,6 +585,11 @@ a.notActivSM {
 	margin: 3px;
 }
 
+#postsDiv{
+    height: 250px;
+    overflow: scroll;
+}
+
 #postsDiv > a > small {
     font-size: 0.8em;
 }
@@ -843,11 +848,33 @@ a.notActivSM {
 	}
 }
 
+@media only screen and (min-height: 640px) {
+    #postsDiv{
+        height: 335px;
+    }
+}
+
+@media only screen and (min-height: 730px) {
+    #postsDiv{
+        height: 425px;
+    }
+}
+
+@media only screen and (min-height: 810px) {
+    #postsDiv{
+        height: 500px;
+    }
+}
+
 @media only screen and (min-height: 1000px) {
 	#rightSide > img {
 		height: 400px;
 		width: 400px;
 	}
+    
+    #postsDiv{
+        height: 700px;
+    }
 }
 
 /*
