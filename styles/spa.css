@@ -681,9 +681,9 @@ a.notActivSM {
 
 @media only screen and (min-width: 560px) {
 	body{
-		background-image: url(../bcg1_h.jpg);
-	  background-repeat: no-repeat;
-	  background-size: 100% 100%;
+        background-image: url(../bcg1_h.jpg);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
 	}
 
 	.container {
@@ -778,6 +778,15 @@ a.notActivSM {
 	height: 200px;
 	width: 200px;
 	}
+    
+    #dupa{
+        display: flex;
+    }
+    
+    #rightSide > iframe {
+		width: 250px;
+		height: 250px;
+	}
 
 	.teamsBut > img{
 	width: 100px;
@@ -807,6 +816,17 @@ a.notActivSM {
 		height: 300px;
 	}
 
+}
+
+@media only screen and (min-width: 570px) {
+    #dupa{
+        display: none;
+    }
+    
+    #rightSide > iframe {
+		width: 300px;
+		height: 300px;
+	}
 }
 
 @media only screen and (max-height: 350px) {

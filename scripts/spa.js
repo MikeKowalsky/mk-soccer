@@ -316,7 +316,7 @@ function getMapLink(location){
 		case 'BorussiaDortmund': linkMap = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.124172545034!2d7.449663350801104!3d51.492588779532774!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b919d39230d60f%3A0x8fd9c195ad02eddf!2sSignal+Iduna+Park!5e0!3m2!1spl!2sde!4v1523371452264" width="300" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>';
 														return linkMap;
 		case 'VfLWolfsburg': linkMap = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2432.575414536524!2d10.801738950847316!3d52.43249047969855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47af93c8d01e69e5%3A0xe2465df60ba210ae!2sVolkswagen-Arena!5e0!3m2!1spl!2sde!4v1523371483446" width="300" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>';
-														return linkMap;																																																																																																																
+														return linkMap;						
 	}
 }
 
