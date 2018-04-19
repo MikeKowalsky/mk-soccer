@@ -16,13 +16,14 @@ let chatMain = '';
 $(document).ready(() => {
 
 	// event listener -> when form landscape to portrait (hide map etc)
-	window.addEventListener("orientationchange", function() {
-        console.log(screen.orientation.angle);
-        console.log(screen.orientation);
-        if(window.matchMedia("(orientation: landscape)").matches){
+//	window.addEventListener("orientationchange", function() {
+	window.addEventListener("resize", function() {
+//        console.log(screen.orientation.angle);
+//        console.log(screen.orientation);
+        if(window.matchMedia("(orientation: portrait)").matches){
             console.log("portrait");
             console.log($(window).height());
-            if ($(window).width() > 1000) {
+            if (($(window).height() > 1000) && $(".gamesContainer").css('display') == 'none' && $("#findLocation").css('display') == 'none' && $("#teamDiv").css('display') == 'none' && $(".map").css('display') == 'none' && $("#loginDiv").css('display') == 'none' && $("#chatDiv").css('display')) {
                 console.log($(window).height());
                 $("#rightSide").show();
             } else {
@@ -247,6 +248,7 @@ function printOneDay(dayArray){
         console.log(chatMain);
         chatNameButton(chatMain);
         $("#gd").hide();
+        $("#rightSide").hide();
         if (firebase.auth().currentUser != null){
             $('#mainDiv').removeClass('container');
             $('#mainDiv').removeClass('containerChat');
